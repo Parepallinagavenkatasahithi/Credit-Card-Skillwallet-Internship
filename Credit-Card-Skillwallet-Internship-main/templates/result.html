@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillWallet Internship | Decision Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;       /* Deep Navy */
+            --primary-hover: #1e293b; /* Lighter Navy */
+            --accent: #2563eb;        /* Bright Blue */
+            --success: #10b981;       /* Emerald */
+            --danger: #ef4444;        /* Red */
+            --background: #f8fafc;    /* Off-white */
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 1.25rem 3rem;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-mark {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            padding: 4rem 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 4rem 3rem;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.4s ease-out;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+        
+        .result-card.approved::before { background: var(--success); }
+        .result-card.rejected::before { background: var(--danger); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .approved .status-icon {
+            background: var(--success);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .rejected .status-icon {
+            background: var(--danger);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+
+        h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        a.button {
+            display: inline-block;
+            background: var(--background);
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 0.875rem 2.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        a.button:hover {
+            background: var(--border);
+            border-color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span class="logo-mark"></span>
+            SkillWallet Internship
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Jinja dynamic class setting based on result -->
+        <div class="result-card {% if 'Approved' in prediction_text %}approved{% else %}rejected{% endif %}">
+            
+            <div class="status-icon">
+                {% if 'Approved' in prediction_text %}
+                    ✓
+                {% else %}
+                    ✕
+                {% endif %}
+            </div>
+
+            <h2>{{ prediction_text }}</h2>
+            
+            <p>
+                {% if 'Approved' in prediction_text %}
+                    Based on the provided demographic and financial profile, this application meets the criteria and is automatically <strong>approved</strong> for credit.
+                {% else %}
+                    Based on the provided demographic and financial profile, this application carries too much risk and is <strong>rejected</strong>.
+                {% endif %}
+            </p>
+
+            <a href="/" class="button">Evaluate Another Applicant</a>
+        </div>
+    </div>
+</body>
+</html>

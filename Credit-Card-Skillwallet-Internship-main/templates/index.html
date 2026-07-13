@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillWallet Internship | Credit Decision Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;       /* Deep Navy */
+            --primary-hover: #1e293b; /* Lighter Navy */
+            --accent: #2563eb;        /* Bright Blue */
+            --background: #f8fafc;    /* Off-white */
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 1.25rem 3rem;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-mark {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            padding: 3rem 1.5rem;
+        }
+
+        .hero {
+            margin-bottom: 2.5rem;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            letter-spacing: -0.025em;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        .form-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem 2rem;
+        }
+
+        .input-box {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .input-box label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-box input,
+        .input-box select {
+            background: var(--background);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            outline: none;
+            width: 100%;
+        }
+
+        .input-box input:focus,
+        .input-box select:focus {
+            border-color: var(--accent);
+            background: var(--card-bg);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .submit-container {
+            grid-column: 1 / -1;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span class="logo-mark"></span>
+            SkillWallet Internship
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h2>Applicant Evaluation</h2>
+            <p>Enter the applicant's demographic and financial details below to run our automated credit risk assessment.</p>
+            <div class="criteria-box" style="margin-top: 1.5rem; background: rgba(0,0,0,0.03); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); text-align: left; max-width: 600px; margin-left: auto; margin-right: auto; font-size: 0.9rem;">
+                <strong>Approval Criteria (ML Model Expectations):</strong>
+                <ul style="margin-top: 0.5rem; margin-left: 1.5rem; color: var(--text-muted);">
+                    <li><strong>Low Risk (Approved):</strong> Higher income, longer employment duration, older applicants, stable housing (House/apartment), no past defaults in history window.</li>
+                    <li><strong>High Risk (Rejected):</strong> Low income, very short employment duration, high number of dependents relative to income, past payment defaults.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <form action="{{ url_for('predict') }}" method="POST">
+                
+                <div class="input-box">
+                    <label>Gender</label>
+                    <select name="CODE_GENDER" required>
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Own Car?</label>
+                    <select name="FLAG_OWN_CAR" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Own Real Estate?</label>
+                    <select name="FLAG_OWN_REALTY" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Number of Children</label>
+                    <input type="number" name="CNT_CHILDREN" placeholder="e.g. 0" required min="0">
+                </div>
+
+                <div class="input-box">
+                    <label>Total Annual Income ($)</label>
+                    <input type="number" name="AMT_INCOME_TOTAL" placeholder="e.g. 75000" required min="0" step="any">
+                </div>
+
+                <div class="input-box">
+                    <label>Income Type</label>
+                    <select name="NAME_INCOME_TYPE" required>
+                        <option value="0">Working</option>
+                        <option value="1">Commercial Associate</option>
+                        <option value="2">Pensioner</option>
+                        <option value="3">State Servant</option>
+                        <option value="4">Student</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Education</label>
+                    <select name="NAME_EDUCATION_TYPE" required>
+                        <option value="0">Higher education</option>
+                        <option value="1">Secondary / secondary special</option>
+                        <option value="2">Incomplete higher</option>
+                        <option value="3">Lower secondary</option>
+                        <option value="4">Academic degree</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Family Status</label>
+                    <select name="NAME_FAMILY_STATUS" required>
+                        <option value="0">Married</option>
+                        <option value="1">Single / not married</option>
+                        <option value="2">Civil marriage</option>
+                        <option value="3">Separated</option>
+                        <option value="4">Widow</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Housing Type</label>
+                    <select name="NAME_HOUSING_TYPE" required>
+                        <option value="0">House / apartment</option>
+                        <option value="1">With parents</option>
+                        <option value="2">Municipal apartment</option>
+                        <option value="3">Rented apartment</option>
+                        <option value="4">Office apartment</option>
+                        <option value="5">Co-op apartment</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Age (in Years)</label>
+                    <input type="number" name="DAYS_BIRTH" placeholder="e.g. 35" required min="18" max="100">
+                </div>
+
+                <div class="input-box">
+                    <label>Employed Duration (in Years)</label>
+                    <input type="number" name="DAYS_EMPLOYED" placeholder="e.g. 5" required min="0" max="60">
+                </div>
+
+                <div class="input-box">
+                    <label>Has Mobile Phone?</label>
+                    <select name="FLAG_MOBIL" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Has Work Phone?</label>
+                    <select name="FLAG_WORK_PHONE" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Has Landline?</label>
+                    <select name="FLAG_PHONE" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Has Email?</label>
+                    <select name="FLAG_EMAIL" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Total Family Members</label>
+                    <input type="number" name="CNT_FAM_MEMBERS" placeholder="e.g. 2" required min="1">
+                </div>
+
+                <div class="input-box">
+                    <label>Total Dependents</label>
+                    <input type="number" name="FAMILY_DEPENDENCY" placeholder="e.g. 3" required min="0">
+                </div>
+                
+                <div class="input-box">
+                    <label>Oldest Record (Months Ago)</label>
+                    <input type="number" name="open_month" placeholder="e.g. -24" required step="any">
+                </div>
+
+                <div class="input-box">
+                    <label>Newest Record (Months Ago)</label>
+                    <input type="number" name="end_month" placeholder="e.g. 0" required step="any">
+                </div>
+                
+                <div class="input-box">
+                    <label>Credit History Window</label>
+                    <input type="number" name="window" placeholder="e.g. 24" required min="0">
+                </div>
+
+                <div class="submit-container">
+                    <button type="submit">Evaluate Application</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
